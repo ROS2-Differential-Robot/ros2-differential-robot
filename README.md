@@ -8,7 +8,7 @@ The **ROS 2 Differential Robot** project is designed to develop an autonomous ro
 
 Before setting up the project, ensure you have the following software installed:
 
-- **ROS 2 Jazzy**: Follow the [ROS 2 installation guide](https://docs.ros.org/en/foxy/Installation/Ubuntu-Install-Debians.html).
+- **ROS 2 Jazzy**: Follow the [ROS 2 installation guide](https://docs.ros.org/en/jazzy/Installation.html).
 - **Gazebo Harmonic**: Ensure that you have the Harmonic version of Gazebo installed.
 
 ## Setup Instructions
