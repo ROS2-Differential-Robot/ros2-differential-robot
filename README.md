@@ -58,7 +58,7 @@ source install/setup.bash
 You can launch the robot in a Gazebo simulation using the following command:
 
 ```bash
-ros2 launch diff_drive_robot your_launch_file.launch.py
+ros2 launch diff_drive_robot diff_drive.launch.py
 ```
 
 
