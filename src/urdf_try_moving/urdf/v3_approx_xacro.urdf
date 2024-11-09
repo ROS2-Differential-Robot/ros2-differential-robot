@@ -20,20 +20,63 @@
     <xacro:property name="body_length" value="0.3" />
     <xacro:property name="body_width" value="0.2" />
     <xacro:property name="body_height" value="0.1" />
+    <xacro:property name="body_mass" value="1.0" />
+
     <xacro:property name="lidar_radius" value="0.05" />
     <xacro:property name="lidar_length" value="0.06" />
+    <xacro:property name="lidar_mass" value="0.17" />
+
     <xacro:property name="wheel_radius" value="0.04" />
     <xacro:property name="wheel_length" value="0.02" />
+    <xacro:property name="wheel_mass" value="0.05" />
+
     <xacro:property name="caster_radius" value="${wheel_radius / 2}" />
+    <xacro:property name="caster_mass" value="0.03" />
+
     <xacro:property name="holder_radius" value="0.01" />
     <xacro:property name="holder_length" value="0.15" />
+    <xacro:property name="holder_mass" value="0.1" />
+
     <xacro:property name="tray_length" value="${body_length * 0.9}" />
     <xacro:property name="tray_width" value="${body_width * 0.9}" />
     <xacro:property name="tray_height" value="0.02" />
+    <xacro:property name="tray_mass" value="0.1" />
 
     <link name="base_link" />
 
+    <xacro:macro name="box_inertia" params="mass height width depth">
+        <inertial>
+            <mass value="${mass}" />
+            <origin xyz="0 0 0" />
+            <inertia ixx="${1/12 * mass * (depth*depth + height*height)}" ixy="0.0" ixz="0.0"
+                iyy="${1/12 * mass * (width*width + height*height)}" iyz="0.0"
+                izz="${1/12 * mass * (width*width + depth*depth)}" />
+        </inertial>
+    </xacro:macro>
+
+    <xacro:macro name="cylinder_inertia" params="mass radius height">
+        <inertial>
+            <mass value="${mass}" />
+            <origin xyz="0 0 0" />
+            <inertia ixx="${1/12 * mass * (3*(radius*radius) + height*height)}" ixy="0.0" ixz="0.0"
+                iyy="${1/12 * mass * (3*(radius*radius) + height*height)}" iyz="0.0"
+                izz="${0.5 * mass * radius*radius}" />
+        </inertial>
+    </xacro:macro>
+
+    <xacro:macro name="sphere_inertia" params="mass radius">
+        <inertial>
+            <mass value="${mass}" />
+            <origin xyz="0 0 0" />
+            <inertia ixx="${0.4 * mass * radius*radius}" ixy="0.0" ixz="0.0"
+                iyy="${0.4 * mass * radius*radius}" iyz="0.0"
+                izz="${0.4 * mass * radius*radius}" />
+        </inertial>
+    </xacro:macro>
+
     <link name="body">
+        <xacro:box_inertia mass="${body_mass}" height="${body_height}" width="${body_width}"
+            depth="${body_length}" />
         <visual>
             <geometry>
                 <box size="${body_length} ${body_width} ${body_height}" />
@@ -54,6 +97,8 @@
     </joint>
 
     <link name="lidar">
+        <xacro:cylinder_inertia mass="${lidar_mass} " radius="${lidar_radius}"
+            height="${lidar_length}" />
         <visual>
             <geometry>
                 <cylinder radius="${lidar_radius}" length="${lidar_length}" />
@@ -65,7 +110,6 @@
                 <cylinder radius="${lidar_radius}" length="${lidar_length}" />
             </geometry>
         </collision>
-        <!-- mass = 0.17 kg -->
     </link>
 
     <joint name="lidar_joint" type="continuous">
@@ -75,8 +119,10 @@
         <axis xyz="0 0 1" />
     </joint>
 
-    <xacro:macro name="leg" params="pos_name pos_val">
+    <xacro:macro name="wheel" params="pos_name pos_val">
         <link name="${pos_name}_wheel">
+            <xacro:cylinder_inertia mass="${wheel_mass} " radius="${wheel_radius}"
+                height="${wheel_length}" />
             <visual>
                 <geometry>
                     <cylinder radius="${wheel_radius}" length="${wheel_length}" />
@@ -100,10 +146,11 @@
         </joint>
     </xacro:macro>
 
-    <xacro:leg pos_name="left" pos_val="1" />
-    <xacro:leg pos_name="right" pos_val="-1" />
+    <xacro:wheel pos_name="left" pos_val="1" />
+    <xacro:wheel pos_name="right" pos_val="-1" />
 
     <link name="caster_wheel">
+        <xacro:sphere_inertia mass="${caster_mass}" radius="${caster_radius}" />
         <visual>
             <geometry>
                 <sphere radius="${caster_radius}" />
@@ -125,6 +172,8 @@
 
     <xacro:macro name="holder" params="name x y">
         <link name="${name}_holder">
+            <xacro:cylinder_inertia mass="${holder_mass} " radius="${holder_radius}"
+                height="${holder_length}" />
             <visual>
                 <geometry>
                     <cylinder radius="${holder_radius}" length="${holder_length}" />
@@ -153,6 +202,8 @@
     <xacro:holder name="left_back" x="-1" y="1" />
 
     <link name="tray">
+        <xacro:box_inertia mass="${tray_mass}" height="${tray_height}" width="${tray_width}"
+            depth="${tray_length}" />
         <visual>
             <geometry>
                 <box size="${tray_length} ${tray_width} ${tray_height}" />
@@ -170,7 +221,7 @@
         <parent link="right_back_holder" />
         <child link="tray" />
         <origin
-            xyz="${tray_length / 2 - holder_radius * 2} ${tray_width / 2 - holder_radius * 2} ${(holder_length + tray_height) / 2}" />
+            xyz="${tray_length / 2 - holder_radius * 2} ${tray_width / 2 - holder_radius * 2} ${holder_length / 2 - tray_height / 2}" />
     </joint>
 
 </robot>
