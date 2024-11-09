@@ -165,7 +165,7 @@
         </collision>
     </link>
 
-    <joint name="caster_wheel_joint" type="fixed">
+    <joint name="caster_wheel_joint" type="continuous">
         <parent link="body" />
         <child link="caster_wheel" />
         <origin xyz="${body_length / 2 - caster_radius} 0 ${- body_height / 2 - caster_radius}" />
@@ -384,7 +384,7 @@
             <match field="data">16777236</match>
           </input>
           <output type="gz.msgs.Twist" topic="/cmd_vel">
-            linear: {x: 0.1}, angular: {z: 10.0}
+            linear: {x: 0.1}, angular: {z: -1.0}
           </output>
         </plugin>
 
@@ -394,7 +394,7 @@
                 <match field="data">16777234</match>
             </input>
             <output type="gz.msgs.Twist" topic="/cmd_vel">
-                linear: {x: 0.1}, angular: {z: -10.0}
+                linear: {x: 0.1}, angular: {z: 1.0}
             </output>
         </plugin>
 
