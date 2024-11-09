@@ -1,0 +1,299 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="car">
+
+  <xacro:property name="body_length" value="2" />
+  <xacro:property name="body_width" value="1" />
+  <xacro:property name="body_height" value="0.5" />
+  <xacro:property name="body_mass" value="100" />
+  <xacro:property name="wheel_length" value="0.1" />
+  <xacro:property name="wheel_radius" value="0.3" />
+
+  <link name="base_link" />
+
+  <joint name="chassis-joint" type="fixed">
+    <parent link="base_link" />
+    <child link="chassis" />
+    <origin xyz="0 0 ${body_height / 2 + wheel_radius / 2}" rpy="0 0 0" />
+  </joint>
+
+  <material name="yellow">
+    <color rgba="1 0 0 1" />
+  </material>
+
+  <material name="white">
+    <color rgba="1 1 1 1" />
+  </material>
+
+  <xacro:macro name="wheel" params="position origin">
+    <link name="${position}-wheel">
+      <visual>
+        <geometry>
+          <cylinder radius="0.3" length="0.1" />
+        </geometry>
+        <material name="yellow" />
+      </visual>
+
+      <collision>
+        <geometry>
+          <cylinder radius="0.3" length="0.1" />
+        </geometry>
+      </collision>
+
+      <inertial>
+        <mass value="5" />
+        <inertia ixx="0.1166" ixy="0.0" ixz="0.0" iyy="0.1166" iyz="0.0" izz="0.225" />
+      </inertial>
+    </link>
+
+    <joint name="${position}-wheel-joint" type="continuous">
+      <parent link="chassis" />
+      <child link="${position}-wheel" />
+      <axis xyz="0 0 1" />
+      <origin xyz="${origin}" rpy="-1.57079632679 0 0" />
+    </joint>
+  </xacro:macro>
+
+  <link name="chassis">
+    <visual>
+      <geometry>
+        <box size="${body_length} ${body_width} ${body_height}" />
+      </geometry>
+      <material name="white" />
+    </visual>
+
+    <collision>
+      <geometry>
+        <box size="${body_length} ${body_width} ${body_height}" />
+      </geometry>
+    </collision>
+
+    <inertial>
+      <mass value="${body_mass}" />
+      <inertia ixx="10.416" ixy="0.0" ixz="0.0" iyy="35.416" iyz="0.0" izz="41.66" />
+    </inertial>
+  </link>
+
+  <link name="lidar">
+    <visual>
+      <geometry>
+        <cylinder radius="0.1" length="0.1" />
+      </geometry>
+      <material name="yellow" />
+      <origin xyz="0 0 0.05" rpy="0 0 0" />
+    </visual>
+
+    <collision>
+      <geometry>
+        <cylinder radius="0.1" length="0.1" />
+      </geometry>
+      <origin xyz="0 0 0.05" rpy="0 0 0" />
+    </collision>
+
+    <inertial>
+      <mass value="0.1" />
+      <inertia ixx="0.0001" ixy="0.0" ixz="0.0" iyy="0.0001" iyz="0.0" izz="0.0001" />
+      <origin xyz="0 0 0.05" rpy="0 0 0" />
+    </inertial>
+  </link>
+
+  <joint name="lidar-joint" type="fixed">
+    <parent link="chassis" />
+    <child link="lidar" />
+    <origin xyz="0 0 ${body_height / 2}" rpy="0 0 0" />
+  </joint>
+
+  <xacro:wheel position="left-back"
+    origin="${-body_length/2+wheel_radius} ${-body_width/2-wheel_length/2} ${-body_height / 2 + wheel_radius / 2}" />
+  <xacro:wheel position="left-front"
+    origin="${body_length/2-wheel_radius} ${-body_width/2-wheel_length/2} ${-body_height / 2 + wheel_radius / 2}" />
+  <xacro:wheel position="right-front"
+    origin="${body_length/2-wheel_radius} ${body_width/2+wheel_length/2} ${-body_height / 2 + wheel_radius / 2}" />
+  <xacro:wheel position="right-back"
+    origin="${-body_length/2+wheel_radius} ${body_width/2+wheel_length/2} ${-body_height / 2 + wheel_radius / 2}" />
+
+  <gazebo reference="lidar">
+    <sensor name='gpu_lidar' type='gpu_lidar'>
+      <pose relative_to='lidar'>
+        0 0 0 0 0 0
+      </pose>
+      <topic>scan</topic>
+      <update_rate>10</update_rate>
+      <ray>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.05</stddev>
+        </noise>
+        <scan>
+          <horizontal>
+            <samples>640</samples>
+            <resolution>1</resolution>
+            <min_angle>-1.396263</min_angle>
+            <max_angle>1.396263</max_angle>
+          </horizontal>
+          <vertical>
+            <samples>1</samples>
+            <resolution>0.01</resolution>
+            <min_angle>0</min_angle>
+            <max_angle>0</max_angle>
+          </vertical>
+        </scan>
+        <range>
+          <min>0.08</min>
+          <max>20.0</max>
+          <resolution>0.01</resolution>
+        </range>
+      </ray>
+      <always_on>1</always_on>
+      <visualize>true</visualize>
+    </sensor>
+
+    <sensor name="imu_sensor" type="imu">
+      <always_on>1</always_on>
+      <update_rate>100</update_rate>
+      <visualize>true</visualize>
+      <topic>imu</topic>
+
+      <imu>
+        <angular_velocity>
+          <x>
+            <noise type="gaussian">
+              <mean>0.0</mean>
+              <stddev>2e-4</stddev>
+              <bias_mean>0.0000075</bias_mean>
+              <bias_stddev>0.0000008</bias_stddev>
+            </noise>
+          </x>
+
+          <y>
+            <noise type="gaussian">
+              <mean>0.0</mean>
+              <stddev>2e-4</stddev>
+              <bias_mean>0.0000075</bias_mean>
+            </noise>
+          </y>
+
+          <z>
+            <noise type="gaussian">
+              <mean>0.0</mean>
+              <stddev>2e-4</stddev>
+              <bias_mean>0.0000075</bias_mean>
+              <bias_stddev>0.0000008</bias_stddev>
+            </noise>
+          </z>
+        </angular_velocity>
+
+        <linear_acceleration>
+          <x>
+            <noise type="gaussian">
+              <mean>0.0</mean>
+              <stddev>1.7e-2</stddev>
+              <bias_mean>0.1</bias_mean>
+              <bias_stddev>0.001</bias_stddev>
+            </noise>
+          </x>
+
+          <y>
+            <noise type="gaussian">
+              <mean>0.0</mean>
+              <stddev>1.7e-2</stddev>
+              <bias_mean>0.1</bias_mean>
+              <bias_stddev>0.001</bias_stddev>
+            </noise>
+          </y>
+
+          <z>
+            <noise type="gaussian">
+              <mean>0.0</mean>
+              <stddev>1.7e-2</stddev>
+              <bias_mean>0.1</bias_mean>
+              <bias_stddev>0.001</bias_stddev>
+            </noise>
+          </z>
+        </linear_acceleration>
+      </imu>
+    </sensor>
+
+  </gazebo>
+
+  <gazebo>
+    <plugin filename="gz-sim-imu-system"
+      name="gz::sim::systems::Imu">
+    </plugin>
+
+    <plugin
+      filename="gz-sim-joint-state-publisher-system"
+      name="gz::sim::systems::JointStatePublisher">
+      <joint_name>left-back-wheel-joint</joint_name>
+      <joint_name>left-front-wheel-joint</joint_name>
+      <joint_name>right-back-wheel-joint</joint_name>
+      <joint_name>right-front-wheel-joint</joint_name>
+    </plugin>
+
+    <plugin
+      filename="gz-sim-diff-drive-system"
+      name="gz::sim::systems::DiffDrive">
+      <left_joint>left-front-wheel-joint</left_joint>
+      <left_joint>left-back-wheel-joint</left_joint>
+      <right_joint>right-front-wheel-joint</right_joint>
+      <right_joint>right-back-wheel-joint</right_joint>
+
+      <child_frame_id>base_link</child_frame_id>
+
+      <wheel_separation>1</wheel_separation>
+      <wheel_radius>0.3</wheel_radius>
+      
+      <odom_publish_frequency>1</odom_publish_frequency>
+      <topic>cmd_vel</topic>
+    </plugin>
+
+    <plugin filename="gz-sim-triggered-publisher-system"
+      name="gz::sim::systems::TriggeredPublisher">
+      <input type="gz.msgs.Int32" topic="/keyboard/keypress">
+        <match field="data">16777235</match>
+      </input>
+      <output type="gz.msgs.Twist" topic="/cmd_vel">
+        linear: {x: 2}, angular: {z: 0.0}
+      </output>
+    </plugin>
+
+    <plugin filename="gz-sim-triggered-publisher-system"
+      name="gz::sim::systems::TriggeredPublisher">
+      <input type="gz.msgs.Int32" topic="/keyboard/keypress">
+        <match field="data">16777237</match>
+      </input>
+      <output type="gz.msgs.Twist" topic="/cmd_vel">
+        linear: {x: -2}, angular: {z: 0.0}
+      </output>
+    </plugin>
+
+    <plugin filename="gz-sim-triggered-publisher-system"
+      name="gz::sim::systems::TriggeredPublisher">
+      <input type="gz.msgs.Int32" topic="/keyboard/keypress">
+        <match field="data">16777236</match>
+      </input>
+      <output type="gz.msgs.Twist" topic="/cmd_vel">
+        linear: {x: 0}, angular: {z: 10.0}
+      </output>
+    </plugin>
+
+		<plugin filename="gz-sim-triggered-publisher-system"
+			name="gz::sim::systems::TriggeredPublisher">
+			<input type="gz.msgs.Int32" topic="/keyboard/keypress">
+				<match field="data">16777234</match>
+			</input>
+			<output type="gz.msgs.Twist" topic="/cmd_vel">
+				linear: {x: 0}, angular: {z: -10.0}
+			</output>
+		</plugin>
+
+    <plugin
+      filename="gz-sim-odometry-publisher-system"
+      name="gz::sim::systems::OdometryPublisher">
+      <odom_frame>car/odom</odom_frame>
+      <robot_base_frame>base_link</robot_base_frame>
+    </plugin>
+  </gazebo>
+
+</robot>
