@@ -1,6 +1,6 @@
 from launch import LaunchDescription
 from launch_ros.actions import Node
-from launch.actions import IncludeLaunchDescription, ExecuteProcess
+from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import Command
 from launch_ros.parameter_descriptions import ParameterValue
@@ -30,24 +30,25 @@ def generate_launch_description():
             executable='robot_state_publisher',
             parameters=[{
                 'robot_description': ParameterValue(
-                    Command(['xacro ', str(os.path.join(get_package_share_directory('neu_lidar'), 'model', 'car.xacro'))]), value_type=str
+                    Command(['xacro ', str(os.path.join(get_package_share_directory('urdf_try_moving'), 'urdf', 'v3_approx_xacro.urdf'))]), value_type=str
                 ),
-                'use_sim_time': True
+                'use_sim_time': True,
+                'URDFPreserveFixedJoint': False,
             }],
             output='screen'
         ),
 
         Node(
-            package='ros_gz_sim',
-            executable='create',
-            arguments=['-topic', 'robot_description', '-x', '-2'],
-            output='screen'
+           package='ros_gz_sim',
+           executable='create',
+           arguments=['-topic', 'robot_description', '-x', '-2'],
+           output='screen'
         ),
 
         Node(
             package='tf2_ros',
             executable='static_transform_publisher',
-            arguments=['0', '0', '0', '0', '0', '0', 'lidar', 'car/base_link/gpu_lidar'],
+            arguments=['0', '0', '0', '0', '0', '0', 'lidar', 'adam/lidar/gpu_lidar'],
             output='screen'
         ),
 
@@ -59,11 +60,11 @@ def generate_launch_description():
         ),
 
         IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(
-                os.path.join(get_package_share_directory('slam_toolbox'), 'launch', 'online_async_launch.py')),
-            launch_arguments=[
-                ('use_sim_time', 'true'),
-                ('slam_params_file', os.path.join(get_package_share_directory('neu_lidar'), 'config', 'mapper_params_online_async.yaml')),
-            ]
+                PythonLaunchDescriptionSource(
+                        os.path.join(get_package_share_directory('slam_toolbox'), 'launch', 'online_async_launch.py')),
+                launch_arguments=[
+                        ('use_sim_time', 'true'),
+                        ('slam_params_file', os.path.join(get_package_share_directory('neu_lidar'), 'config', 'mapper_params_online_async.yaml')),
+                    ]
         )
     ])
