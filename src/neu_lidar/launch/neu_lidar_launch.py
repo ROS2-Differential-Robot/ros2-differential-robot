@@ -9,11 +9,13 @@ from ament_index_python.packages import get_package_share_directory
 
 import os
 
+
 def generate_launch_description():
     return LaunchDescription([
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(os.path.join(get_package_share_directory('ros_gz_sim'), 'launch', 'gz_sim.launch.py')),
-            launch_arguments=[('gz_args', os.path.join(get_package_share_directory('neu_lidar'), 'model', 'world', 'walled_world.sdf'))]
+            launch_arguments=[('gz_args', "-r " + os.path.join(get_package_share_directory('neu_lidar'), 'model', 'world', 'walled_world.sdf'))]
+            #launch_arguments=[('gz_args', "-r empty.sdf")]
         ),
 
         Node(
@@ -30,10 +32,9 @@ def generate_launch_description():
             executable='robot_state_publisher',
             parameters=[{
                 'robot_description': ParameterValue(
-                    Command(['xacro ', str(os.path.join(get_package_share_directory('urdf_try_moving'), 'urdf', 'v3_approx_xacro.urdf'))]), value_type=str
+                    Command(['xacro ', str(os.path.join(get_package_share_directory('neu_lidar'), 'model', 'v3_approx_xacro.urdf'))]), value_type=str
                 ),
                 'use_sim_time': True,
-                'URDFPreserveFixedJoint': False,
             }],
             output='screen'
         ),
@@ -41,14 +42,27 @@ def generate_launch_description():
         Node(
            package='ros_gz_sim',
            executable='create',
-           arguments=['-topic', 'robot_description', '-x', '-2'],
+           arguments=['-topic', 'robot_description'],
            output='screen'
+        ),
+
+        Node(
+            package='controller_manager',
+            executable='spawner',
+            arguments=['diff_cont', 'joint_broad']
         ),
 
         Node(
             package='tf2_ros',
             executable='static_transform_publisher',
-            arguments=['0', '0', '0', '0', '0', '0', 'lidar', 'adam/lidar/gpu_lidar'],
+            arguments=['0', '0', '0', '0', '0', '0', 'lidar', 'adam/base_link/gpu_lidar'],
+            output='screen'
+        ),
+
+        Node(
+            package='tf2_ros',
+            executable='static_transform_publisher',
+            arguments=['0', '0', '0', '0', '0', '0', 'lidar', 'adam/base_link/imu_sensor'],
             output='screen'
         ),
 
@@ -59,11 +73,22 @@ def generate_launch_description():
             output='screen'
         ),
 
+
+        Node(
+            package='robot_localization',
+            executable='ekf_node',
+            name='ekf_filter_node',
+            output='screen',
+            parameters=[
+                os.path.join(get_package_share_directory('neu_lidar'), 'config', 'ekf-config.yaml'),
+            ]
+        ),
+
         IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(
                         os.path.join(get_package_share_directory('slam_toolbox'), 'launch', 'online_async_launch.py')),
                 launch_arguments=[
-                        ('use_sim_time', 'true'),
+                        #('use_sim_time', 'true'),
                         ('slam_params_file', os.path.join(get_package_share_directory('neu_lidar'), 'config', 'mapper_params_online_async.yaml')),
                     ]
         )

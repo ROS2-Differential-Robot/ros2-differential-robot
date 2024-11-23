@@ -10,7 +10,7 @@ slam_toolbox:
     ceres_loss_function: HuberLoss
 
     # ROS Parameters
-    odom_frame: car/odom
+    odom_frame: odom
     map_frame: map
     base_frame: base_link
     scan_topic: /scan
