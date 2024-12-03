@@ -26,6 +26,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            "joystick_twist=neu_lidar.joystick_twist:main"
         ],
     },
 )

@@ -91,5 +91,17 @@ def generate_launch_description():
                         ('use_sim_time', 'true'),
                         ('slam_params_file', os.path.join(get_package_share_directory('neu_lidar'), 'config', 'mapper_params_online_async.yaml')),
                     ]
-        )
+        ),
+
+        Node(
+            package='neu_lidar',
+            executable='joystick_twist',
+            output='screen',
+        ),
+
+        Node(
+            package='joy',
+            executable='joy_node',
+            output='screen',
+        ),
     ])
