@@ -26,6 +26,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            "twist_stamper = nav2_test.twist_stamper:main"
         ],
     },
 )
