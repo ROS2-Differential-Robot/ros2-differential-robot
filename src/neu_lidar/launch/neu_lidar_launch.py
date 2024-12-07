@@ -55,6 +55,13 @@ def generate_launch_description():
         Node(
             package='tf2_ros',
             executable='static_transform_publisher',
+            arguments=['0', '0', '0', '0', '0', '0', 'base_link', 'base_footprint'],
+            output='screen'
+        ),
+
+        Node(
+            package='tf2_ros',
+            executable='static_transform_publisher',
             arguments=['0', '0', '0', '0', '0', '0', 'lidar', 'adam/base_link/gpu_lidar'],
             output='screen'
         ),

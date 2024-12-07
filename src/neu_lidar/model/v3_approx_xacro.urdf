@@ -171,60 +171,6 @@
         <origin xyz="${body_length / 2 - caster_radius} 0 ${- body_height / 2 - caster_radius}" />
     </joint>
 
-    <xacro:macro name="holder" params="name x y">
-        <link name="${name}_holder">
-            <xacro:cylinder_inertia mass="${holder_mass} " radius="${holder_radius}"
-                height="${holder_length}" />
-            <visual>
-                <geometry>
-                    <cylinder radius="${holder_radius}" length="${holder_length}" />
-                </geometry>
-                <material name="gray" />
-            </visual>
-            <collision>
-                <geometry>
-                    <cylinder radius="${holder_radius}" length="${holder_length}" />
-                </geometry>
-            </collision>
-        </link>
-
-        <joint name="${name}_holder_joint" type="fixed">
-            <parent link="body" />
-            <child link="${name}_holder" />
-            <origin
-                xyz="${x * (body_length * 0.45 - holder_radius * 2)} ${y * (body_width * 0.45 - holder_radius * 2)} ${(body_height + holder_length) / 2}" />
-        </joint>
-
-    </xacro:macro>
-
-    <xacro:holder name="right_front" x="1" y="-1" />
-    <xacro:holder name="left_front" x="1" y="1" />
-    <xacro:holder name="right_back" x="-1" y="-1" />
-    <xacro:holder name="left_back" x="-1" y="1" />
-
-    <link name="tray">
-        <xacro:box_inertia mass="${tray_mass}" height="${tray_height}" width="${tray_width}"
-            depth="${tray_length}" />
-        <visual>
-            <geometry>
-                <box size="${tray_length} ${tray_width} ${tray_height}" />
-            </geometry>
-            <material name="red" />
-        </visual>
-        <collision>
-            <geometry>
-                <box size="${tray_length} ${tray_width} ${tray_height}" />
-            </geometry>
-        </collision>
-    </link>
-
-    <joint name="tray_joint" type="fixed">
-        <parent link="right_back_holder" />
-        <child link="tray" />
-        <origin
-            xyz="${tray_length / 2 - holder_radius * 2} ${tray_width / 2 - holder_radius * 2} ${holder_length / 2 - tray_height / 2}" />
-    </joint>
-
   <gazebo reference="lidar">
     <sensor name='gpu_lidar' type='gpu_lidar'>
       <pose relative_to='lidar'>

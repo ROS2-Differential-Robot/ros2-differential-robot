@@ -2,6 +2,7 @@ import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import Joy
 from geometry_msgs.msg import TwistStamped
+import math
 
 
 class JoystickTwist(Node):
@@ -11,6 +12,9 @@ class JoystickTwist(Node):
         self.__publisher = self.create_publisher(TwistStamped, '/diff_cont/cmd_vel', 1)
 
     def publish_twist(self, msg: Joy):
+        if math.isclose(msg.axes[1], 0.0, rel_tol=0.01):
+            return
+
         twist_stamped = TwistStamped()
         twist_stamped.header.stamp = self.get_clock().now().to_msg()
         twist_stamped.twist.linear.x = msg.axes[1] * 1.0
