@@ -26,7 +26,9 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            "joystick_twist=neu_lidar.joystick_twist:main"
+            "joystick_twist=neu_lidar.joystick_twist:main",
+            'publisher_table_num = neu_lidar.publisher_table_num:main',
+            'subscriber_table_num = neu_lidar.subscriber_table_num:main',
         ],
     },
 )
