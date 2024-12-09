@@ -73,32 +73,42 @@ def generate_launch_description():
             output='screen'
         ),
 
-        Node(
-            package='rviz2',
-            executable='rviz2',
-            arguments=['-d', os.path.join(get_package_share_directory('neu_lidar'), 'config', 'slam_mapping.rviz')],
-            output='screen'
-        ),
+        # Node(
+        #     package='rviz2',
+        #     executable='rviz2',
+        #     arguments=['-d', os.path.join(get_package_share_directory('neu_lidar'), 'config', 'slam_mapping.rviz')],
+        #     output='screen'
+        # ),
 
-        Node(
-            package='robot_localization',
-            executable='ekf_node',
-            name='ekf_filter_node',
-            output='screen',
-            parameters=[
-                os.path.join(get_package_share_directory('neu_lidar'), 'config', 'ekf-config.yaml'),
-                {'use_sim_time': True}
-            ],
-        ),
+        # Node(
+        #     package='robot_localization',
+        #     executable='ekf_node',
+        #     name='ekf_filter_node',
+        #     output='screen',
+        #     parameters=[
+        #         os.path.join(get_package_share_directory('neu_lidar'), 'config', 'ekf-config.yaml'),
+        #         {'use_sim_time': True}
+        #     ],
+        # ),
 
-        IncludeLaunchDescription(
-                PythonLaunchDescriptionSource(
-                        os.path.join(get_package_share_directory('slam_toolbox'), 'launch', 'online_async_launch.py')),
-                launch_arguments=[
-                        ('use_sim_time', 'true'),
-                        ('slam_params_file', os.path.join(get_package_share_directory('neu_lidar'), 'config', 'mapper_params_online_async.yaml')),
-                    ]
-        ),
+        # IncludeLaunchDescription(
+        #         PythonLaunchDescriptionSource(
+        #                 os.path.join(get_package_share_directory('slam_toolbox'), 'launch', 'online_async_launch.py')),
+        #         launch_arguments=[
+        #                 ('use_sim_time', 'true'),
+        #                 ('slam_params_file', os.path.join(get_package_share_directory('neu_lidar'), 'config', 'mapper_params_online_async.yaml')),
+        #             ]
+        # ),
+
+        # IncludeLaunchDescription(
+        #     PythonLaunchDescriptionSource(
+        #             os.path.join(get_package_share_directory('nav2_test'), 'launch', 'nav2.launch.py'))
+        # ),
+
+        # IncludeLaunchDescription(
+        #     PythonLaunchDescriptionSource(
+        #             os.path.join(get_package_share_directory('nav2_test'), 'launch', 'slam.launch.py'))
+        # ),
 
         Node(
             package='neu_lidar',
