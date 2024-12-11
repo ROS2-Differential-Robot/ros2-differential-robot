@@ -1,0 +1,14 @@
+digraph G {
+"lidar" -> "adam/base_link/gpu_lidar"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"body" -> "lidar"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"base_link" -> "base_footprint"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"lidar" -> "adam/base_link/imu_sensor"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"base_link" -> "body"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"body" -> "left_wheel"[label=" Broadcaster: default_authority\nAverage rate: 14.91\nBuffer length: 4.896\nMost recent transform: 317.016\nOldest transform: 312.12\n"];
+"body" -> "right_wheel"[label=" Broadcaster: default_authority\nAverage rate: 14.91\nBuffer length: 4.896\nMost recent transform: 317.016\nOldest transform: 312.12\n"];
+edge [style=invis];
+ subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
+"Recorded at time: 1733788178.10906"[ shape=plaintext ] ;
+}->"base_link";
+}
+
