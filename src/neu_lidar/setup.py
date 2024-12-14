@@ -29,6 +29,8 @@ setup(
             "joystick_twist=neu_lidar.joystick_twist:main",
             'publisher_table_num = neu_lidar.publisher_table_num:main',
             'subscriber_table_num = neu_lidar.subscriber_table_num:main',
+            'pose_recorder = neu_lidar.pose_recorder:main',
+            'goal_sender = neu_lidar.goal_sender:main',
         ],
     },
 )
