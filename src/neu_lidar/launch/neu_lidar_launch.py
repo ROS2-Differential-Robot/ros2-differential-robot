@@ -100,6 +100,16 @@ def generate_launch_description():
                     ]
         ),
 
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(
+                    os.path.join(get_package_share_directory('nav2_test'), 'launch', 'nav2.launch.py'))
+        ),
+
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(
+                    os.path.join(get_package_share_directory('nav2_test'), 'launch', 'slam.launch.py'))
+        ),
+
         Node(
             package='neu_lidar',
             executable='joystick_twist',
