@@ -16,6 +16,7 @@ setup(
         (os.path.join('share', package_name, 'launch'), glob(os.path.join('launch', '*.*'))),
         (os.path.join('share', package_name, 'model'), glob(os.path.join('model', '*.*'))),
         (os.path.join('share', package_name, 'model', 'world'), glob(os.path.join('model', 'world', '*.*'))),
+        (os.path.join('share', package_name, 'maps'), glob(os.path.join('maps', '*.*'))),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -26,7 +27,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            "twist_stamper = nav2_test.twist_stamper:main"
+            "twist_stamper = nav2_test.twist_stamper:main",
+            "initial_pose_publisher = nav2_test.initial_pose_publisher:main"
         ],
     },
 )
