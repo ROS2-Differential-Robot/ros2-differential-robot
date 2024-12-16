@@ -22,19 +22,20 @@ class GoalSender(Node):
     def target_callback(self, msg):
         target_id = int(msg.data)
         if target_id in self.positions:
-            x, y = self.positions[target_id]
-            self.send_goal(x, y)
+            x, y, z, w = self.positions[target_id]
+            self.send_goal(x, y, z, w)
         else:
             self.get_logger().warn(f"Invalid ID received: {target_id}")
 
-    def send_goal(self, x, y):
+    def send_goal(self, x, y, z, w):
         goal = PoseStamped()
         goal.header.frame_id = "map"  # Ensure this matches your setup
         goal.pose.position.x = x
         goal.pose.position.y = y
-        goal.pose.orientation.w = 1.0  # Facing forward
+        goal.pose.orientation.z = z 
+        goal.pose.orientation.w = w 
         self.goal_publisher.publish(goal)
-        self.get_logger().info(f"Sent goal: x={x:.2f}, y={y:.2f}")
+        self.get_logger().info(f"Sent goal: x={x:.2f}, y={y:.2f}, z={z:.2f}")
 
 
 def main(args=None):

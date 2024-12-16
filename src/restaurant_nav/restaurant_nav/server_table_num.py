@@ -16,7 +16,7 @@ def send_table_num(table_num):
     publisher_socket.close()
 
 
-send_table_num(1)
+send_table_num(5)
 
 
 

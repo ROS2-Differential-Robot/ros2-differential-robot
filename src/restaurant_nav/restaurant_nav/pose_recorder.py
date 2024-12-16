@@ -21,8 +21,11 @@ class PoseRecorder(Node):
     def pose_callback(self, msg):
         x = msg.pose.position.x
         y = msg.pose.position.y
-        self.positions[self.next_id] = [x,y]
-        self.get_logger().info(f"Recorded position: x={x:.2f}, y={y:.2f} with id={self.next_id}")
+
+        z = msg.pose.orientation.z
+        w = msg.pose.orientation.w
+        self.positions[self.next_id] = [x,y,z,w]
+        self.get_logger().info(f"Recorded position: x={x:.2f}, y={y:.2f}, z={z:.2f} with id={self.next_id}")
         self.next_id += 1
         self.save_poses_to_file()
 

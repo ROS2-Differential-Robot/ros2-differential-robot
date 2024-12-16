@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 import os
 from glob import glob
 
-package_name = 'neu_lidar'
+package_name = 'restaurant_nav'
 
 setup(
     name=package_name,
@@ -19,13 +19,16 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='ali',
-    maintainer_email='ali@todo.todo',
+    maintainer='ahmed-hehsam',
+    maintainer_email='ahmedhesham1652001@gmail.com',
     description='TODO: Package description',
-    license='TODO: License declaration',
+    license='Apache-2.0',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            'publisher_table_num = restaurant_nav.publisher_table_num:main',
+            'pose_recorder = restaurant_nav.pose_recorder:main',
+            'goal_sender = restaurant_nav.goal_sender:main',
             "joystick_twist=neu_lidar.joystick_twist:main",
         ],
     },

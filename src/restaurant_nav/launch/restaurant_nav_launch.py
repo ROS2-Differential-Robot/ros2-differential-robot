@@ -14,7 +14,7 @@ def generate_launch_description():
     return LaunchDescription([
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(os.path.join(get_package_share_directory('ros_gz_sim'), 'launch', 'gz_sim.launch.py')),
-            launch_arguments=[('gz_args', "-r " + os.path.join(get_package_share_directory('neu_lidar'), 'model', 'world', 'simple_world.sdf'))]
+            launch_arguments=[('gz_args', "-r " + os.path.join(get_package_share_directory('restaurant_nav'), 'model', 'world', 'restaurant_world.sdf'))]
             #launch_arguments=[('gz_args', "-r empty.sdf")]
         ),
 
@@ -22,7 +22,7 @@ def generate_launch_description():
             package='ros_gz_bridge',
             executable='parameter_bridge',
             parameters=[{
-                'config_file': os.path.join(get_package_share_directory('neu_lidar'), 'config', 'gz_bridge_config.yaml'),
+                'config_file': os.path.join(get_package_share_directory('restaurant_nav'), 'config', 'gz_bridge_config.yaml'),
             }],
             output='screen'
         ),
@@ -32,7 +32,7 @@ def generate_launch_description():
             executable='robot_state_publisher',
             parameters=[{
                 'robot_description': ParameterValue(
-                    Command(['xacro ', str(os.path.join(get_package_share_directory('neu_lidar'), 'model', 'v3_approx_xacro.urdf'))]), value_type=str
+                    Command(['xacro ', str(os.path.join(get_package_share_directory('restaurant_nav'), 'model', 'v3_approx_xacro.urdf'))]), value_type=str
                 ),
                 'use_sim_time': True,
             }],
@@ -73,12 +73,12 @@ def generate_launch_description():
             output='screen'
         ),
 
-        Node(
-            package='rviz2',
-            executable='rviz2',
-            arguments=['-d', os.path.join(get_package_share_directory('neu_lidar'), 'config', 'simple_env.rviz')],
-            output='screen'
-        ),
+        # Node(
+        #     package='rviz2',
+        #     executable='rviz2',
+        #     arguments=['-d', os.path.join(get_package_share_directory('restaurant_nav'), 'config', 'map_created.rviz')],
+        #     output='screen'
+        # ),
 
         Node(
             package='robot_localization',
@@ -86,7 +86,7 @@ def generate_launch_description():
             name='ekf_filter_node',
             output='screen',
             parameters=[
-                os.path.join(get_package_share_directory('neu_lidar'), 'config', 'ekf-config.yaml'),
+                os.path.join(get_package_share_directory('restaurant_nav'), 'config', 'ekf-config.yaml'),
                 {'use_sim_time': True}
             ],
         ),
@@ -96,12 +96,11 @@ def generate_launch_description():
                         os.path.join(get_package_share_directory('slam_toolbox'), 'launch', 'online_async_launch.py')),
                 launch_arguments=[
                         ('use_sim_time', 'true'),
-                        ('slam_params_file', os.path.join(get_package_share_directory('neu_lidar'), 'config', 'mapper_params_online_async.yaml')),
+                        ('slam_params_file', os.path.join(get_package_share_directory('restaurant_nav'), 'config', 'mapper_params_online_async.yaml')),
                     ]
         ),
-
         Node(
-            package='neu_lidar',
+            package='restaurant_nav',
             executable='joystick_twist',
             output='screen',
         ),
@@ -110,5 +109,14 @@ def generate_launch_description():
             package='joy',
             executable='joy_node',
             output='screen',
+        ),
+
+        Node(
+            package='restaurant_nav',
+            executable='goal_sender',
+        ),
+        Node(
+            package='restaurant_nav',
+            executable='publisher_table_num',
         ),
     ])
