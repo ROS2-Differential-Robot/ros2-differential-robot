@@ -15,7 +15,7 @@ class GoalSender(Node):
             self.target_callback,
             10)
         self.goal_publisher = self.create_publisher(PoseStamped, '/goal_pose', 10)
-        with open(os.path.join(os.getcwd(), 'positions.yaml'), 'r') as file:
+        with open(os.path.join(os.getcwd(), 'src/ros2-differential-robot/src/restaurant_nav/restaurant_nav/positions.yaml'), 'r') as file:
             self.positions = yaml.safe_load(file)['positions']
         self.get_logger().info('GoalSender node started.')
 
