@@ -1,3 +1,15 @@
 {
-  "cmake.sourceDirectory": "/home/ahmed/Graduation_Project/ros2_ws/src/ros2-differential-robot/src/diff_drive_robot"
+  "cmake.sourceDirectory": "/home/ahmed/Graduation_Project/ros2_ws/src/ros2-differential-robot/src/diff_drive_robot",
+  "python.autoComplete.extraPaths": [
+    "/home/marwan/Desktop/GradProject/ros2-differential-robot/install/urdf_try_moving/lib/python3.12/site-packages",
+    "/home/marwan/Desktop/GradProject/ros2-differential-robot/install/neu_lidar/lib/python3.12/site-packages",
+    "/home/marwan/Desktop/GradProject/ros2-differential-robot/install/nav2_test/lib/python3.12/site-packages",
+    "/opt/ros/jazzy/lib/python3.12/site-packages"
+  ],
+  "python.analysis.extraPaths": [
+    "/home/marwan/Desktop/GradProject/ros2-differential-robot/install/urdf_try_moving/lib/python3.12/site-packages",
+    "/home/marwan/Desktop/GradProject/ros2-differential-robot/install/neu_lidar/lib/python3.12/site-packages",
+    "/home/marwan/Desktop/GradProject/ros2-differential-robot/install/nav2_test/lib/python3.12/site-packages",
+    "/opt/ros/jazzy/lib/python3.12/site-packages"
+  ]
 }

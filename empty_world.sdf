@@ -1,0 +1,182 @@
+<sdf version="1.6">
+  <world name="empty">
+    <physics name="1ms" type="ignored">
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+    </physics>
+    <plugin
+      filename="gz-sim-physics-system"
+      name="gz::sim::systems::Physics">
+    </plugin>
+    <plugin
+      filename="gz-sim-user-commands-system"
+      name="gz::sim::systems::UserCommands">
+    </plugin>
+    <plugin
+      filename="gz-sim-scene-broadcaster-system"
+      name="gz::sim::systems::SceneBroadcaster">
+    </plugin>
+    <plugin
+      filename="gz-sim-contact-system"
+      name="gz::sim::systems::Contact">
+    </plugin>
+
+    <light type="directional" name="sun">
+      <cast_shadows>true</cast_shadows>
+      <pose>0 0 10 0 0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
+
+    <model name="ground_plane">
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+          <material>
+            <ambient>0.8 0.8 0.8 1</ambient>
+            <diffuse>0.8 0.8 0.8 1</diffuse>
+            <specular>0.8 0.8 0.8 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <actor name="actor_walking">
+        <skin>
+            <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</filename>
+            <scale>1.0</scale>
+        </skin>
+        <animation name="walk">
+            <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</filename>
+            <interpolate_x>true</interpolate_x>
+        </animation>
+
+      <script>
+          <loop>true</loop>
+          <delay_start>0.000000</delay_start>
+          <auto_start>true</auto_start>
+          <trajectory id="0" type="walk" tension="0.6">
+              <waypoint>
+                  <time>0</time>
+                  <pose>0 0 1.0 0 0 0</pose>
+              </waypoint>
+              <waypoint>
+                  <time>2</time>
+                  <pose>2.0 0 1.0 0 0 0</pose>
+              </waypoint>
+              <waypoint>
+                  <time>2.5</time>
+                  <pose>2 0 1.0 0 0 1.57</pose>
+              </waypoint>
+              <waypoint>
+                  <time>4</time>
+                  <pose>2 2 1.0 0 0 1.57</pose>
+              </waypoint>
+              <waypoint>
+                  <time>4.5</time>
+                  <pose>2 2 1.0 0 0 3.142</pose>
+              </waypoint>
+              <waypoint>
+                  <time>6</time>
+                  <pose>0 2 1 0 0 3.142</pose>
+              </waypoint>
+              <waypoint>
+                  <time>6.5</time>
+                  <pose>0 2 1 0 0 -1.57</pose>
+              </waypoint>
+              <waypoint>
+                  <time>8</time>
+                  <pose>0 0 1.0 0 0 -1.57</pose>
+              </waypoint>
+              <waypoint>
+                  <time>8.5</time>
+                  <pose>0 0 1.0 0 0 0</pose>
+              </waypoint>
+          </trajectory>
+      </script>
+    </actor>
+
+    <actor name="actor_walking_2">
+        <skin>
+            <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</filename>
+            <scale>1.0</scale>
+        </skin>
+        <animation name="walk">
+            <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</filename>
+            <interpolate_x>true</interpolate_x>
+        </animation>
+
+      <script>
+          <loop>true</loop>
+          <delay_start>0.000000</delay_start>
+          <auto_start>true</auto_start>
+          <trajectory id="0" type="walk" tension="0.6">
+              <waypoint>
+                  <time>0</time>
+                  <pose>0 0 1.0 0 0 1.57</pose>
+              </waypoint>
+              <waypoint>
+                  <time>1</time>
+                  <pose>0 2.0 1.0 0 0 1.57</pose>
+              </waypoint>
+              <waypoint>
+                  <time>2.5</time>
+                  <pose>0 2 1.0 0 0 1.57</pose>
+              </waypoint>
+              <waypoint>
+                  <time>4</time>
+                  <pose>2 2 1.0 0 0 0</pose>
+              </waypoint>
+              <waypoint>
+                  <time>4.5</time>
+                  <pose>2 2 1.0 0 0 0</pose>
+              </waypoint>
+              <waypoint>
+                  <time>6</time>
+                  <pose>2 0 1 0 0 0</pose>
+              </waypoint>
+              <waypoint>
+                  <time>6.5</time>
+                  <pose>2 0 1 0 0 -1.57</pose>
+              </waypoint>
+              <waypoint>
+                  <time>8</time>
+                  <pose>0 0 1.0 0 0 -1.57</pose>
+              </waypoint>
+              <waypoint>
+                  <time>8.5</time>
+                  <pose>0 0 1.0 0 0 0</pose>
+              </waypoint>
+          </trajectory>
+      </script>
+    </actor>
+    
+    <include>
+      <uri>
+        https://fuel.gazebosim.org/1.0/cyborg/models/Hatchback
+      </uri>
+    </include>
+
+  </world>
+</sdf>
