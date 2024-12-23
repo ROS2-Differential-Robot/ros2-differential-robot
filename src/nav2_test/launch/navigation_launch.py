@@ -306,6 +306,14 @@ def generate_launch_description():
         output='screen'
     )
 
+    map_server = Node(
+        package='nav2_map_server',
+        executable='map_server',
+        name='map_server',
+        output='screen',
+        parameters=[{'yaml_filename': '/home/marwan/Desktop/GradProject/ros2-differential-robot/src/nav2_test/maps/resturant_map.yaml'}]
+    )
+
     # Create the launch description and populate
     ld = LaunchDescription()
 
@@ -326,5 +334,7 @@ def generate_launch_description():
     ld.add_action(load_composable_nodes)
 
     ld.add_action(twist_stamper)
+    
+    ld.add_action(map_server)
 
     return ld

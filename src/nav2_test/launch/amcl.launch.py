@@ -12,10 +12,10 @@ import os
 
 def generate_launch_description():
     return LaunchDescription([
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(os.path.join(get_package_share_directory('ros_gz_sim'), 'launch', 'gz_sim.launch.py')),
-            launch_arguments=[('gz_args', "-r " + os.path.join(get_package_share_directory('neu_lidar'), 'model', 'world', 'walled_world.sdf'))]
-        ),
+        # IncludeLaunchDescription(
+        #     PythonLaunchDescriptionSource(os.path.join(get_package_share_directory('ros_gz_sim'), 'launch', 'gz_sim.launch.py')),
+        #     launch_arguments=[('gz_args', "-r " + os.path.join(get_package_share_directory('neu_lidar'), 'model', 'world', 'walled_world.sdf'))]
+        # ),
 
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(os.path.join(get_package_share_directory('nav2_test'), 'launch', 'localization_launch.py')),
