@@ -1,18 +1,5 @@
 from launch import LaunchDescription
 from launch_ros.actions import Node
-from launch.actions import IncludeLaunchDescription
-from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import Command
-from launch_ros.parameter_descriptions import ParameterValue
-
-from ament_index_python.packages import get_package_share_directory
-
-import os
-
-
-def generate_launch_description():
-    from launch import LaunchDescription
-from launch_ros.actions import Node
 from launch.actions import IncludeLaunchDescription, TimerAction
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import Command
@@ -86,11 +73,13 @@ def generate_launch_description():
                     arguments=['-z', '2.0', '-topic', 'robot_description'],
                     output='screen'
                 ),
+
                 Node(
                     package='controller_manager',
                     executable='spawner',
                     arguments=['diff_cont', 'joint_broad']
                 ),
+
                 Node(
                     package='robot_localization',
                     executable='ekf_node',
@@ -103,12 +92,11 @@ def generate_launch_description():
                 ),
 
                 IncludeLaunchDescription(
-                    PythonLaunchDescriptionSource(
-                        os.path.join(get_package_share_directory('slam_toolbox'), 'launch', 'online_async_launch.py')),
+                    PythonLaunchDescriptionSource(os.path.join(get_package_share_directory('nav2_test'), 'launch', 'localization_launch.py')),
                     launch_arguments=[
-                        ('use_sim_time', 'true'),
-                        ('slam_params_file', os.path.join(get_package_share_directory('restaurant_nav'), 'config', 'mapper_params_online_async.yaml')),
-                    ],
+                        ("use_sim_time", "true"),
+                        ("map", os.path.join(get_package_share_directory("restaurant_nav"), "config", "restaurant_map.yaml"))
+                    ]
                 ),
 
                 Node(
@@ -126,6 +114,12 @@ def generate_launch_description():
                 Node(
                     package='restaurant_nav',
                     executable='goal_sender',
+                ),
+
+                Node(
+                    package='nav2_test',
+                    executable='initial_pose_publisher',
+                    output='screen',
                 ),
 
                 Node(
