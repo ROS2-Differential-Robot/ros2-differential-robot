@@ -4,6 +4,7 @@ from geometry_msgs.msg import PoseStamped
 from std_msgs.msg import String
 import yaml
 import os
+from ament_index_python.packages import get_package_share_directory
 
 class GoalSender(Node):
 
@@ -15,7 +16,9 @@ class GoalSender(Node):
             self.target_callback,
             10)
         self.goal_publisher = self.create_publisher(PoseStamped, '/goal_pose', 10)
-        with open(os.path.join(os.getcwd(), 'src/ros2-differential-robot/src/restaurant_nav/restaurant_nav/positions.yaml'), 'r') as file:
+
+        pkg_dir = get_package_share_directory("restaurant_nav")
+        with open(os.path.join(pkg_dir, 'restaurant_nav', 'positions.yaml'), 'r') as file:
             self.positions = yaml.safe_load(file)['positions']
         self.get_logger().info('GoalSender node started.')
 

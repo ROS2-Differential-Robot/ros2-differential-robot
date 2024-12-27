@@ -16,6 +16,7 @@ setup(
         (os.path.join('share', package_name, 'launch'), glob(os.path.join('launch', '*.*'))),
         (os.path.join('share', package_name, 'model'), glob(os.path.join('model', '*.*'))),
         (os.path.join('share', package_name, 'model', 'world'), glob(os.path.join('model', 'world', '*.*'))),
+        (os.path.join('share', package_name, package_name), glob(os.path.join(package_name, '*.*'))),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
