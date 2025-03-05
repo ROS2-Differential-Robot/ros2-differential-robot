@@ -1,8 +1,8 @@
 from launch import LaunchDescription
 from launch_ros.actions import Node
-from launch.actions import IncludeLaunchDescription, TimerAction
+from launch.actions import IncludeLaunchDescription, TimerAction, DeclareLaunchArgument
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import Command
+from launch.substitutions import LaunchConfiguration, Command
 from launch_ros.parameter_descriptions import ParameterValue
 
 from ament_index_python.packages import get_package_share_directory
@@ -12,7 +12,15 @@ import os
 
 def generate_launch_description():
     os.environ['GZ_SIM_RESOURCE_PATH'] = os.environ.get('GZ_SIM_RESOURCE_PATH', '') + f":{os.path.join(get_package_share_directory('restaurant'), 'models')}"
+
+    is_sim_arg = DeclareLaunchArgument(
+        'is_sim', default_value='true',
+        description='Set to true if running in simulation'
+    )
+    
     return LaunchDescription([
+        is_sim_arg,
+        
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(os.path.join(get_package_share_directory('nav2_test'), 'launch', 'navigation_launch.py')),
         ),
@@ -36,7 +44,7 @@ def generate_launch_description():
             executable='robot_state_publisher',
             parameters=[{
                 'robot_description': ParameterValue(
-                    Command(['xacro ', str(os.path.join(get_package_share_directory('neu_lidar'), 'model', 'v3_approx_xacro.urdf'))]), value_type=str
+                    Command(['xacro ', str(os.path.join(get_package_share_directory('neu_lidar'), 'model', 'v3_approx_xacro.urdf')),  " is_sim:=", LaunchConfiguration('is_sim')]), value_type=str
                 ),
                 'use_sim_time': True,
             }],

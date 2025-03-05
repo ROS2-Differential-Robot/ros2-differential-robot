@@ -1,6 +1,9 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="adam">
 
+  <!-- Load Simulated or Real Hardware Interfaces -->
+  <xacro:arg name="is_sim" default="true"/>
+
     <material name="red">
         <color rgba="0.8 0 0 1" />
     </material>
@@ -297,9 +300,22 @@
   </gazebo>
 
   <ros2_control name="GazeboSystem" type="system">
-    <hardware>
+
+    <!-- ros2_control Gazebo Robot -->
+    <xacro:if value="$(arg is_sim)">
+      <hardware>
         <plugin>gz_ros2_control/GazeboSimSystem</plugin>
-    </hardware>
+      </hardware>
+    </xacro:if>
+    
+    <!-- ros2_control Real Robot -->
+    <xacro:unless value="$(arg is_sim)">
+      <hardware>
+        <plugin>bumperbot_firmware/BumperbotInterface</plugin>
+        <param name="port">/dev/arduino</param>
+      </hardware>
+    </xacro:unless>
+
     <joint name="right_wheel_joint">
         <command_interface name="velocity">
             <param name="min">-10</param>

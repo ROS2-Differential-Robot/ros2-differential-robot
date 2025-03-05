@@ -1,0 +1,10 @@
+<library path="abdo_firmware">
+    <class name="abdo_firmware/AbdoInterface"
+      type="abdo_firmware::AbdoInterface"
+      base_class_type="hardware_interface::SystemInterface"
+    >
+      <description>
+        Abdo Hardware Interface
+      </description>
+    </class>
+  </library>
