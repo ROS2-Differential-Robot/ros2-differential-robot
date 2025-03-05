@@ -1,4 +1,5 @@
 import socket
+import sys
 
 def send_table_num(table_num):
     # Configuration
@@ -16,7 +17,9 @@ def send_table_num(table_num):
     publisher_socket.close()
 
 
-send_table_num(12)
+if __name__ == "__main__":
+    table_num = sys.argv[1]
+    send_table_num(table_num)
 
 
 
