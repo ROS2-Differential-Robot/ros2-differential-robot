@@ -47,6 +47,11 @@ install(
   DESTINATION include
 )
 
+install(
+    DIRECTORY launch/
+    DESTINATION share/${PROJECT_NAME}/launch
+)
+
 ament_export_include_directories(
   include
 )
