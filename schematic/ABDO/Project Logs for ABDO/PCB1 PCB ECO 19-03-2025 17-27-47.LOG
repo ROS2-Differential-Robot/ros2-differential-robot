@@ -1,0 +1,79 @@
+Added Component: Designator=Arduino Uno(ARDUINO UNO)
+Added Component: Designator=L298(HDR1X4)
+Add component (AddParameter): Name = "LatestRevisionDate"; Value = "17-Jul-2002"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "LatestRevisionNote"; Value = "Re-released for DXP Platform."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Added Component: Designator=Motor_1_Out(HDR1X2)
+Add component (AddParameter): Name = "LatestRevisionDate"; Value = "17-Jul-2002"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "LatestRevisionNote"; Value = "Re-released for DXP Platform."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Added Component: Designator=Motor_1(HDR1X6)
+Add component (AddParameter): Name = "LatestRevisionDate"; Value = "17-Jul-2002"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "LatestRevisionNote"; Value = "Re-released for DXP Platform."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Added Component: Designator=Motor_2_Out(HDR1X2)
+Add component (AddParameter): Name = "LatestRevisionDate"; Value = "17-Jul-2002"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "LatestRevisionNote"; Value = "Re-released for DXP Platform."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Added Component: Designator=Motor_2(HDR1X6)
+Add component (AddParameter): Name = "LatestRevisionDate"; Value = "17-Jul-2002"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "LatestRevisionNote"; Value = "Re-released for DXP Platform."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Add Component: Footprint Not Found MPU6050
+Added Component: Designator=Power(HDR1X3)
+Add component (AddParameter): Name = "LatestRevisionDate"; Value = "17-Jul-2002"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "LatestRevisionNote"; Value = "Re-released for DXP Platform."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=+5 Pin=Arduino Uno-5V
+Added Pin To Net: NetName=+5 Pin=Motor_1-5
+Added Pin To Net: NetName=+5 Pin=Motor_2-5
+Added Pin To Net: NetName=+5 Pin=Power-3
+Added Net: Name=+5
+Added Pin To Net: NetName=GND Pin=Arduino Uno-GND1
+Added Pin To Net: NetName=GND Pin=Motor_1-2
+Added Pin To Net: NetName=GND Pin=Motor_2-2
+Added Pin To Net: NetName=GND Pin=Power-2
+Added Net: Name=GND
+Added Pin To Net: NetName=L298_IN_1 Pin=Arduino Uno-11
+Added Pin To Net: NetName=L298_IN_1 Pin=L298-1
+Added Net: Name=L298_IN_1
+Added Pin To Net: NetName=L298_IN_2 Pin=Arduino Uno-10
+Added Pin To Net: NetName=L298_IN_2 Pin=L298-2
+Added Net: Name=L298_IN_2
+Added Pin To Net: NetName=L298_IN_3 Pin=Arduino Uno-6
+Added Pin To Net: NetName=L298_IN_3 Pin=L298-3
+Added Net: Name=L298_IN_3
+Added Pin To Net: NetName=L298_IN_4 Pin=Arduino Uno-5
+Added Pin To Net: NetName=L298_IN_4 Pin=L298-4
+Added Net: Name=L298_IN_4
+Added Pin To Net: NetName=Motor_1_+ Pin=Motor_1-6
+Added Pin To Net: NetName=Motor_1_+ Pin=Motor_1_Out-1
+Added Net: Name=Motor_1_+
+Added Pin To Net: NetName=Motor_1_- Pin=Motor_1-1
+Added Pin To Net: NetName=Motor_1_- Pin=Motor_1_Out-2
+Added Net: Name=Motor_1_-
+Added Pin To Net: NetName=Motor_1_Encoder_A_Phase Pin=Arduino Uno-9
+Added Pin To Net: NetName=Motor_1_Encoder_A_Phase Pin=Motor_1-3
+Added Net: Name=Motor_1_Encoder_A_Phase
+Added Pin To Net: NetName=Motor_1_Encoder_B_Phase Pin=Arduino Uno-8
+Added Pin To Net: NetName=Motor_1_Encoder_B_Phase Pin=Motor_1-4
+Added Net: Name=Motor_1_Encoder_B_Phase
+Added Pin To Net: NetName=Motor_2_+ Pin=Motor_2-6
+Added Pin To Net: NetName=Motor_2_+ Pin=Motor_2_Out-1
+Added Net: Name=Motor_2_+
+Added Pin To Net: NetName=Motor_2_- Pin=Motor_2-1
+Added Pin To Net: NetName=Motor_2_- Pin=Motor_2_Out-2
+Added Net: Name=Motor_2_-
+Added Pin To Net: NetName=Motor_2_Encoder_A_Phase Pin=Arduino Uno-3
+Added Pin To Net: NetName=Motor_2_Encoder_A_Phase Pin=Motor_2-3
+Added Net: Name=Motor_2_Encoder_A_Phase
+Added Pin To Net: NetName=Motor_2_Encoder_B_Phase Pin=Arduino Uno-2
+Added Pin To Net: NetName=Motor_2_Encoder_B_Phase Pin=Motor_2-4
+Added Net: Name=Motor_2_Encoder_B_Phase
+Added Pin To Net: NetName=SCL Pin=Arduino Uno-SCL
+Added Net: Name=SCL
+Added Pin To Net: NetName=SDA Pin=Arduino Uno-SDA
+Added Net: Name=SDA
+Added Class: Name=Sheet1
+Added Rule: Name=Schematic Supply Nets
+Added Rule: Name=Schematic Supply Nets_1

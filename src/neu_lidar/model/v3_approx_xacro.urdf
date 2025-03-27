@@ -311,8 +311,8 @@
     <!-- ros2_control Real Robot -->
     <xacro:unless value="$(arg is_sim)">
       <hardware>
-        <plugin>bumperbot_firmware/BumperbotInterface</plugin>
-        <param name="port">/dev/arduino</param>
+        <plugin>abdo_firmware/AbdoInterface</plugin>
+        <param name="port">/dev/ttyACM0</param>
       </hardware>
     </xacro:unless>
 
