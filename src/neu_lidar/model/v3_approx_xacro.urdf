@@ -293,6 +293,11 @@
         <render_engine>ogre2</render_engine>
     </plugin>
 
+    <plugin filename="libgz_ros2_control-system.so"
+    name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+        <parameters>$(find neu_lidar)/config/controllers.yaml</parameters>
+    </plugin>
+
   </gazebo>
 
   <ros2_control name="GazeboSystem" type="system">
