@@ -59,12 +59,6 @@ void setup() {
   pinMode(L298N_in3, OUTPUT);
   pinMode(L298N_in4, OUTPUT);
 
-  // Set Motor Rotation Direction
-  digitalWrite(L298N_in1, HIGH);
-  digitalWrite(L298N_in2, LOW);
-  digitalWrite(L298N_in3, HIGH);
-  digitalWrite(L298N_in4, LOW);
-
   rightMotor.SetMode(AUTOMATIC);
   leftMotor.SetMode(AUTOMATIC);
   Serial.begin(115200);
@@ -164,19 +158,19 @@ void loop() {
     left_encoder_counter = 0;
 
     if (is_right_wheel_forward) {
-      digitalWrite(L298N_in1, right_wheel_cmd);
-      digitalWrite(L298N_in2, LOW);
+      analogWrite(L298N_in1, right_wheel_cmd);
+      analogWrite(L298N_in2, LOW);
     } else {
-      digitalWrite(L298N_in1, LOW);
-      digitalWrite(L298N_in2, right_wheel_cmd);
+      analogWrite(L298N_in1, LOW);
+      analogWrite(L298N_in2, right_wheel_cmd);
     }
 
     if (is_left_wheel_forward) {
-      digitalWrite(L298N_in3, left_wheel_cmd);
-      digitalWrite(L298N_in4, LOW);
+      analogWrite(L298N_in3, left_wheel_cmd);
+      analogWrite(L298N_in4, LOW);
     } else {
-      digitalWrite(L298N_in3, LOW);
-      digitalWrite(L298N_in4, left_wheel_cmd);
+      analogWrite(L298N_in3, LOW);
+      analogWrite(L298N_in4, left_wheel_cmd);
     }
   }
 }

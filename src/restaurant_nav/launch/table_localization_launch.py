@@ -58,7 +58,8 @@ def generate_launch_description():
             parameters=[{
                 'config_file': os.path.join(get_package_share_directory('neu_lidar'), 'config', 'gz_bridge_config.yaml'),
             }],
-            output='screen'
+            output='screen',
+            condition=IfCondition(is_sim)
         ),
 
         Node(
@@ -94,12 +95,12 @@ def generate_launch_description():
             output='screen'
         ),
 
-        Node(
-            package='rviz2',
-            executable='rviz2',
-            arguments=['-d', os.path.join(get_package_share_directory('restaurant_nav'), 'config', 'map_created.rviz')],
-            output='screen'
-        ),
+        # Node(
+            # package='rviz2',
+            # executable='rviz2',
+            # arguments=['-d', os.path.join(get_package_share_directory('restaurant_nav'), 'config', 'map_created.rviz')],
+            # output='screen'
+        # ),
 
         GroupAction(
             actions=[
@@ -135,12 +136,6 @@ def generate_launch_description():
                 Node(
                     package='neu_lidar',
                     executable='joystick_twist',
-                    output='screen',
-                ),
-
-                Node(
-                    package='joy',
-                    executable='joy_node',
                     output='screen',
                 ),
 

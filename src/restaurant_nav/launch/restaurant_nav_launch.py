@@ -63,7 +63,15 @@ def generate_launch_description():
             arguments=['0', '0', '0', '0', '0', '0', 'lidar', 'adam/base_link/imu_sensor'],
             output='screen'
         ),
-
+        Node(
+            package="rplidar_ros",
+            executable="rplidar_composition",
+            parameters=[{
+                "serial_port": "/dev/ttyUSB0",
+                    "frame_id": "lidar",
+                    "angle_compensate": True
+            }]
+        ),
         TimerAction(
             period=35.0,  # Timeout in seconds
             actions=[
