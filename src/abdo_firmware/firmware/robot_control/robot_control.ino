@@ -7,10 +7,10 @@
 #define L298N_in4 5   // Dir Motor B
 
 // Wheel Encoders Connection PINs
-#define right_encoder_phaseA 9  // Interrupt
+#define right_encoder_phaseA 2  // Interrupt
 #define right_encoder_phaseB 8
 #define left_encoder_phaseA 3  // Interrupt
-#define left_encoder_phaseB 2
+#define left_encoder_phaseB 9
 
 // Encoders
 unsigned int right_encoder_counter = 0;

@@ -153,6 +153,11 @@ def generate_launch_description():
                     package='restaurant_nav',
                     executable='pose_recorder',
                 ),
+                
+                Node(
+                    package='mpu6500_driver',
+                    executable='mpu6500_driver'
+                )
             ],
             condition=UnlessCondition(is_sim)
         ),
