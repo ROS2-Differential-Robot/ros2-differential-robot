@@ -49,7 +49,6 @@ def generate_launch_description():
         'collision_monitor',
         'bt_navigator',
         'waypoint_follower',
-        'docking_server',
     ]
 
     # Map fully qualified names to relative ones so the node's namespace can be prepended.
@@ -214,17 +213,6 @@ def generate_launch_description():
                 remappings=remappings,
             ),
             Node(
-                package='opennav_docking',
-                executable='opennav_docking',
-                name='docking_server',
-                output='screen',
-                respawn=use_respawn,
-                respawn_delay=2.0,
-                parameters=[configured_params],
-                arguments=['--ros-args', '--log-level', log_level],
-                remappings=remappings,
-            ),
-            Node(
                 package='nav2_lifecycle_manager',
                 executable='lifecycle_manager',
                 name='lifecycle_manager_navigation',
@@ -300,13 +288,6 @@ def generate_launch_description():
                         remappings=remappings,
                     ),
                     ComposableNode(
-                        package='opennav_docking',
-                        plugin='opennav_docking::DockingServer',
-                        name='docking_server',
-                        parameters=[configured_params],
-                        remappings=remappings,
-                    ),
-                    ComposableNode(
                         package='nav2_lifecycle_manager',
                         plugin='nav2_lifecycle_manager::LifecycleManager',
                         name='lifecycle_manager_navigation',
@@ -324,6 +305,14 @@ def generate_launch_description():
         executable='twist_stamper',
         output='screen'
     )
+
+    # map_server = Node(
+    #     package='nav2_map_server',
+    #     executable='map_server',
+    #     name='map_server',
+    #     output='screen',
+    #     parameters=[{'yaml_filename': '/home/marwan/Desktop/GradProject/ros2-differential-robot/src/nav2_test/maps/resturant_map.yaml'}]
+    # )
 
     # Create the launch description and populate
     ld = LaunchDescription()
@@ -345,5 +334,7 @@ def generate_launch_description():
     ld.add_action(load_composable_nodes)
 
     ld.add_action(twist_stamper)
+    
+    # ld.add_action(map_server)
 
     return ld
