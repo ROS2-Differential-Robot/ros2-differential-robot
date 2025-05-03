@@ -48,14 +48,14 @@ class MPU6500_Driver(Node):
                 self.init_i2c()
             
             # Read Accelerometer raw values
-            acc_x = self.read_raw_data(ACCEL_XOUT_H)
+            acc_x = -self.read_raw_data(ACCEL_XOUT_H)
             acc_y = self.read_raw_data(ACCEL_YOUT_H)
-            acc_z = self.read_raw_data(ACCEL_ZOUT_H)
+            acc_z = -self.read_raw_data(ACCEL_ZOUT_H)
             
             # Read Gyroscope raw values
-            gyro_x = self.read_raw_data(GYRO_XOUT_H)
+            gyro_x = -self.read_raw_data(GYRO_XOUT_H)
             gyro_y = self.read_raw_data(GYRO_YOUT_H)
-            gyro_z = self.read_raw_data(GYRO_ZOUT_H)
+            gyro_z = -self.read_raw_data(GYRO_ZOUT_H)
             
             # Convert to physical units
             self.imu_msg_.linear_acceleration.x = acc_x / ACCEL_SENSITIVITY * 9.8

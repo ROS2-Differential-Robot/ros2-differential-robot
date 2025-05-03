@@ -118,7 +118,7 @@
     <joint name="lidar_joint" type="fixed">
         <parent link="body" />
         <child link="lidar" />
-        <origin xyz="0 0 ${(lidar_length + body_height) / 2}" />
+        <origin xyz="0 0 ${(lidar_length + body_height) / 2}" rpy="0 0 ${22 / 7}" />
         <axis xyz="0 0 1" />
     </joint>
 

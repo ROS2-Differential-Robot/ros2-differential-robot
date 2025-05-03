@@ -141,7 +141,7 @@ namespace abdo_firmware
 			int multiplier = 1;
 			while (std::getline(ss, res, ','))
 			{
-				multiplier = res.at(1) == 'p' ? 1 : -1;
+				multiplier = res.at(1) == 'n' ? 1 : -1;
 
 				if (res.at(0) == 'r')
 				{
