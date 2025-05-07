@@ -59,17 +59,21 @@ controller_server:
       time_steps: 56
       model_dt: 0.05
       batch_size: 2000
-      ax_max: 20.0
-      ax_min: -20.0
-      ay_max: 20.0
-      az_max: 5.0
-      vx_std: 10.0
-      vy_std: 10.0
-      wz_std: 10.0
-      vx_max: 10.0
-      vx_min: -10.0
-      vy_max: 10.0
-      wz_max: 10.0
+
+      ax_max: 2.0
+      ax_min: -2.0
+      ay_max: 0.0
+      az_max: 3.0
+
+      vx_std: 0.2
+      vy_std: 0.0
+      wz_std: 0.3
+
+      vx_max: 0.85
+      vx_min: -0.4
+      vy_max: 0.0
+      wz_max: 2.0
+
       iteration_count: 1
       prune_distance: 1.7
       transform_tolerance: 0.1
@@ -154,12 +158,15 @@ local_costmap:
       width: 3
       height: 3
       resolution: 0.05
+
+      # TODO: fix this
       robot_radius: 0.22
+
       plugins: ["voxel_layer", "inflation_layer"]
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
         cost_scaling_factor: 3.0
-        inflation_radius: 0.05
+        inflation_radius: 0.7
       voxel_layer:
         plugin: "nav2_costmap_2d::VoxelLayer"
         enabled: True
@@ -192,7 +199,10 @@ global_costmap:
       publish_frequency: 1.0
       global_frame: map
       robot_base_frame: base_link
+
+      # TODO: fix this
       robot_radius: 0.22
+
       resolution: 0.05
       track_unknown_space: true
       plugins: ["static_layer", "obstacle_layer", "inflation_layer"]
@@ -227,7 +237,7 @@ planner_server:
     GridBased:
       plugin: "nav2_navfn_planner::NavfnPlanner"
       tolerance: 0.5
-      use_astar: false
+      use_astar: true
       allow_unknown: true
 
 smoother_server:
@@ -281,11 +291,11 @@ velocity_smoother:
   ros__parameters:
     smoothing_frequency: 20.0
     scale_velocities: False
-    feedback: "OPEN_LOOP"
-    max_velocity: [5.0, 0.0, 2.0]
-    min_velocity: [-0.5, 0.0, -2.0]
-    max_accel: [2.5, 0.0, 3.2]
-    max_decel: [-2.5, 0.0, -3.2]
+    feedback: "CLOSED_LOOP"
+    max_velocity: [0.85, 0.0, 2.0]
+    min_velocity: [-0.4, 0.0, -2.0]
+    max_accel: [2.0, 0.0, 3.0]
+    max_decel: [-2.0, 0.0, -3.0]
     odom_topic: "odom"
     odom_duration: 0.1
     deadband_velocity: [0.0, 0.0, 0.0]
