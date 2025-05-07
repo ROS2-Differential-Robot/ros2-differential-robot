@@ -1,0 +1,123 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <link name="base_link" />
+
+    <link name="body">
+        <xacro:box_inertia mass="${body_mass}" height="${body_height}" width="${body_width}"
+            depth="${body_length}" />
+        <visual>
+            <geometry>
+                <box size="${body_length} ${body_width} ${body_height}" />
+            </geometry>
+            <material name="red" />
+        </visual>
+        <collision>
+            <geometry>
+                <box size="${body_length} ${body_width} ${body_height}" />
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="body_joint" type="fixed">
+        <parent link="base_link" />
+        <child link="body" />
+        <origin xyz="0 0 ${body_height / 2 + wheel_radius}" />
+    </joint>
+
+    <link name="lidar_stand">
+        <xacro:box_inertia mass="${lidar_stand_mass}" height="${lidar_stand_height}" width="${lidar_stand_width}"
+            depth="${lidar_stand_length}" />
+        <visual>
+            <geometry>
+                <box size="${lidar_stand_length} ${lidar_stand_width} ${lidar_stand_height}" />
+            </geometry>
+            <material name="green" />
+        </visual>
+        <collision>
+            <geometry>
+                <box size="${lidar_stand_length} ${lidar_stand_width} ${lidar_stand_height}" />
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="lidar_stand_joint" type="fixed">
+        <parent link="body" />
+        <child link="lidar_stand" />
+        <origin xyz="${-body_length / 2 + lidar_radius} 0 ${(body_height + lidar_stand_height) / 2}" />
+    </joint>
+
+    <link name="lidar">
+        <xacro:cylinder_inertia mass="${lidar_mass} " radius="${lidar_radius}"
+            height="${lidar_length}" />
+        <visual>
+            <geometry>
+                <cylinder radius="${lidar_radius}" length="${lidar_length}" />
+            </geometry>
+            <material name="blue" />
+        </visual>
+        <collision>
+            <geometry>
+                <cylinder radius="${lidar_radius}" length="${lidar_length}" />
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="lidar_joint" type="fixed">
+        <parent link="body" />
+        <child link="lidar" />
+        <origin xyz="${-(body_length / 2) + lidar_radius} 0 ${(body_height + lidar_length) / 2 + lidar_stand_height}" rpy="0 0 ${22 / 7}" />
+        <axis xyz="0 0 1" />
+    </joint>
+
+    <xacro:macro name="wheel" params="pos_name pos_val">
+        <link name="${pos_name}_wheel">
+            <xacro:cylinder_inertia mass="${wheel_mass} " radius="${wheel_radius}"
+                height="${wheel_length}" />
+            <visual>
+                <geometry>
+                    <cylinder radius="${wheel_radius}" length="${wheel_length}" />
+                </geometry>
+                <origin rpy="${22 / 7 / 2} 0 0" />
+                <material name="green" />
+            </visual>
+            <collision>
+                <geometry>
+                    <cylinder radius="${wheel_radius}" length="${wheel_length}" />
+                </geometry>
+                <origin rpy="${22 / 7 / 2} 0 0" />
+            </collision>
+        </link>
+
+        <joint name="${pos_name}_wheel_joint" type="continuous">
+            <parent link="body" />
+            <child link="${pos_name}_wheel" />
+            <origin
+                xyz="${-body_length / 2 + wheel_radius} ${pos_val * (body_width + wheel_length) / 2 } ${-body_height / 2}" />
+            <axis xyz="0 1 0" />
+        </joint>
+    </xacro:macro>
+
+    <xacro:wheel pos_name="left" pos_val="1" />
+    <xacro:wheel pos_name="right" pos_val="-1" />
+
+    <link name="caster_wheel">
+        <xacro:sphere_inertia mass="${caster_mass}" radius="${caster_radius}" />
+        <visual>
+            <geometry>
+                <sphere radius="${caster_radius}" />
+            </geometry>
+            <material name="green" />
+        </visual>
+        <collision>
+            <geometry>
+                <sphere radius="${caster_radius}" />
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="caster_wheel_joint" type="continuous">
+        <parent link="body" />
+        <child link="caster_wheel" />
+        <origin xyz="${body_length / 2 - caster_radius} 0 ${- body_height / 2 - caster_radius}" />
+    </joint>
+</robot>
