@@ -22,6 +22,9 @@ ament_python_install_package(${PROJECT_NAME})
 add_library(${PROJECT_NAME} SHARED 
   src/abdo_interface.cpp
 )
+set_target_properties(${PROJECT_NAME} PROPERTIES
+  BUILD_RPATH "/usr/local/lib/aarch64-linux-gnu"
+)
 target_include_directories(${PROJECT_NAME} PRIVATE 
   include
   "${SERIAL_INCLUDE_DIRS}"

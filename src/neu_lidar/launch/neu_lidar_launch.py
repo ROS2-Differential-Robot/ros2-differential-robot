@@ -28,6 +28,7 @@ def generate_launch_description():
     restaurant_dir = get_package_share_directory("restaurant")
     slam_toolbox_dir = get_package_share_directory("slam_toolbox")
     ros_gz_sim_dir = get_package_share_directory("ros_gz_sim")
+    mpu6050_dir = get_package_share_directory("mpu6050")
 
     robot_description_path = os.path.join(neu_lidar_dir, "model", "v3_approx_xacro.urdf")
     controller_params_path = os.path.join(neu_lidar_dir, "config", "controllers.yaml")
@@ -153,6 +154,10 @@ def generate_launch_description():
         }]
     )
 
+    mpu6050_driver_node = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(os.path.join(mpu6050_dir, 'launch', 'mpu6050.launch.py')),
+    )
+
     # === Group for real hardware ===
     hw_group = GroupAction(
         actions=[
@@ -167,6 +172,7 @@ def generate_launch_description():
             slam_toolbox_node,
             joystick_twist_node,
             lidar_driver_node,
+            mpu6050_driver_node
         ],
         condition=UnlessCondition(is_sim)
     )

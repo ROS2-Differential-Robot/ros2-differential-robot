@@ -154,10 +154,10 @@ def generate_launch_description():
                     executable='pose_recorder',
                 ),
                 
-                Node(
-                    package='mpu6500_driver',
-                    executable='mpu6500_driver'
-                )
+                IncludeLaunchDescription(
+                    PythonLaunchDescriptionSource(
+                        os.path.join(get_package_share_directory('mpu6050'), 'launch', 'mpu6050.launch.py'))
+                ),                
             ],
             condition=UnlessCondition(is_sim)
         ),
