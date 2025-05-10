@@ -60,7 +60,7 @@ void Mpu6050Node::ImuPubCallback()
     message.angular_velocity_covariance[0] = {0};
     message.angular_velocity.x = (GyroData.Gyro_X - gyro_x_offset_) * (M_PI / 180.0);
     message.angular_velocity.y = (GyroData.Gyro_Y - gyro_y_offset_) * (M_PI / 180.0);
-    message.angular_velocity.z = (GyroData.Gyro_Z - gyro_z_offset_) * (M_PI / 180.0);
+    message.angular_velocity.z = -(GyroData.Gyro_Z - gyro_z_offset_) * (M_PI / 180.0);
     
     message.orientation_covariance[0] = -1;
     message.orientation.x = 0;
