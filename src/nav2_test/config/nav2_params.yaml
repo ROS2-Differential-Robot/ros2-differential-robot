@@ -72,7 +72,7 @@ controller_server:
       vx_max: 0.85
       vx_min: -0.4
       vy_max: 0.0
-      wz_max: 2.0
+      wz_max: 10.0
 
       iteration_count: 1
       prune_distance: 1.7
