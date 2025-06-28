@@ -165,8 +165,8 @@ local_costmap:
       plugins: ["voxel_layer", "inflation_layer"]
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
-        cost_scaling_factor: 3.0
-        inflation_radius: 0.7
+        cost_scaling_factor: 1
+        inflation_radius: 0.1
       voxel_layer:
         plugin: "nav2_costmap_2d::VoxelLayer"
         enabled: True
@@ -225,8 +225,8 @@ global_costmap:
         map_subscribe_transient_local: True
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
-        cost_scaling_factor: 3.0
-        inflation_radius: 0.7
+        cost_scaling_factor: 1
+        inflation_radius: 0.1
       always_send_full_costmap: True
 
 planner_server:
@@ -292,8 +292,8 @@ velocity_smoother:
     smoothing_frequency: 20.0
     scale_velocities: False
     feedback: "CLOSED_LOOP"
-    max_velocity: [0.85, 0.0, 2.0]
-    min_velocity: [-0.4, 0.0, -2.0]
+    max_velocity: [0.85, 0.0, 10.0]
+    min_velocity: [-0.4, 0.0, -10.0]
     max_accel: [2.0, 0.0, 3.0]
     max_decel: [-2.0, 0.0, -3.0]
     odom_topic: "odom"
