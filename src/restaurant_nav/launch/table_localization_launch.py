@@ -6,6 +6,7 @@ from launch.substitutions import LaunchConfiguration, Command
 from launch_ros.parameter_descriptions import ParameterValue
 from launch.conditions import IfCondition, UnlessCondition
 from launch.event_handlers import OnProcessStart
+from nav2_common.launch import RewrittenYaml
 
 from ament_index_python.packages import get_package_share_directory
 
@@ -16,6 +17,12 @@ def generate_launch_description():
     os.environ['GZ_SIM_RESOURCE_PATH'] = os.environ.get('GZ_SIM_RESOURCE_PATH', '') + f":{os.path.join(get_package_share_directory('restaurant'), 'models')}"
 
     is_sim = LaunchConfiguration("is_sim")
+    map_file_path = LaunchConfiguration("map_file_path")
+    slam_params = os.path.join(get_package_share_directory("restaurant_nav"), "config", "mapper_params_online_async.yaml")
+    
+    configured_params = RewrittenYaml(
+            source_file=slam_params, root_key="", param_rewrites={"map_file_name": map_file_path}, convert_types=True
+    )
 
     robot_description = Command(['ros2 param get --hide-type /robot_state_publisher robot_description'])
     controller_params = os.path.join(get_package_share_directory("neu_lidar"), "config", "controllers.yaml")
@@ -32,14 +39,33 @@ def generate_launch_description():
     )
 
     delayed_controller_manager = TimerAction(
-            period=3.0,
-            actions=[controller_manager]
+        period=3.0,
+        actions=[controller_manager]
+    )
+
+    slam_localization = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(get_package_share_directory('slam_toolbox'), 'launch', 'online_async_launch.py')),
+        launch_arguments=[
+            ('use_sim_time', 'false'),
+            ('slam_params_file', configured_params),
+        ],
+    )
+
+    delayed_slam_localization = TimerAction(
+        period=5.0,
+        actions=[slam_localization]
     )
 
     return LaunchDescription([
         DeclareLaunchArgument(
             'is_sim', default_value='true',
             description='Set to true if running in simulation'
+        ),
+
+        DeclareLaunchArgument(
+            'map_file_path',
+            description='Path to map file'
         ),
 
         # IncludeLaunchDescription(
@@ -113,6 +139,13 @@ def generate_launch_description():
                     )
                 ),
 
+                RegisterEventHandler(
+                    event_handler=OnProcessStart(
+                        target_action=controller_spawner,
+                        on_start=[delayed_slam_localization]
+                    )
+                ),
+
                 Node(
                     package='robot_localization',
                     executable='ekf_node',
@@ -121,15 +154,6 @@ def generate_launch_description():
                     parameters=[
                         os.path.join(get_package_share_directory('neu_lidar'), 'config', 'ekf-config.yaml'),
                         {'use_sim_time': False}
-                    ],
-                ),
-
-                IncludeLaunchDescription(
-                    PythonLaunchDescriptionSource(
-                        os.path.join(get_package_share_directory('slam_toolbox'), 'launch', 'online_async_launch.py')),
-                    launch_arguments=[
-                        ('use_sim_time', 'false'),
-                        ('slam_params_file', os.path.join(get_package_share_directory('restaurant_nav'), 'config', 'mapper_params_online_async.yaml')),
                     ],
                 ),
 

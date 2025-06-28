@@ -6,6 +6,7 @@ from launch.substitutions import LaunchConfiguration, Command
 from launch_ros.parameter_descriptions import ParameterValue
 from launch.conditions import IfCondition, UnlessCondition
 from launch.event_handlers import OnProcessStart
+from nav2_common.launch import RewrittenYaml
 
 from ament_index_python.packages import get_package_share_directory
 
@@ -32,8 +33,38 @@ def generate_launch_description():
     )
 
     delayed_controller_manager = TimerAction(
-            period=3.0,
-            actions=[controller_manager]
+        period=3.0,
+        actions=[controller_manager]
+    )
+
+    map_file_path = LaunchConfiguration("map_file_path")
+    slam_params = os.path.join(get_package_share_directory("restaurant_nav"), "config", "mapper_params_online_async.yaml")
+    
+    configured_params = RewrittenYaml(
+        source_file=slam_params, root_key="", param_rewrites={"map_file_name": map_file_path}, convert_types=True
+    )
+
+    slam_localisation = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(get_package_share_directory('slam_toolbox'), 'launch', 'online_async_launch.py')),
+        launch_arguments=[
+            ('use_sim_time', 'false'),
+            ('slam_params_file', configured_params),
+        ],
+    )
+
+    nav2 = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(os.path.join(get_package_share_directory('nav2_test'), 'launch', 'navigation_launch.py')),
+    )
+
+    delayed_slam_localisation = TimerAction(
+        period=5.0,
+        actions=[slam_localisation]
+    )
+
+    delayed_nav2 = TimerAction(
+        period=7.0,
+        actions=[nav2]
     )
 
     return LaunchDescription([
@@ -42,9 +73,10 @@ def generate_launch_description():
             description='Set to true if running in simulation'
         ),
 
-        # IncludeLaunchDescription(
-            # PythonLaunchDescriptionSource(os.path.join(get_package_share_directory('nav2_test'), 'launch', 'navigation_launch.py')),
-        # ),
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(os.path.join(get_package_share_directory('nav2_test'), 'launch', 'navigation_launch.py')),
+            condition=IfCondition(is_sim),
+        ),
 
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(os.path.join(get_package_share_directory('ros_gz_sim'), 'launch', 'gz_sim.launch.py')),
@@ -106,6 +138,13 @@ def generate_launch_description():
                     )
                 ),
 
+                RegisterEventHandler(
+                    event_handler=OnProcessStart(
+                        target_action=controller_spawner,
+                        on_start=[delayed_slam_localisation, delayed_nav2]
+                    )
+                ),
+
                 Node(
                     package='robot_localization',
                     executable='ekf_node',
@@ -114,15 +153,6 @@ def generate_launch_description():
                     parameters=[
                         os.path.join(get_package_share_directory('neu_lidar'), 'config', 'ekf-config.yaml'),
                         {'use_sim_time': False}
-                    ],
-                ),
-
-                IncludeLaunchDescription(
-                    PythonLaunchDescriptionSource(
-                        os.path.join(get_package_share_directory('slam_toolbox'), 'launch', 'online_async_launch.py')),
-                    launch_arguments=[
-                        ('use_sim_time', 'false'),
-                        ('slam_params_file', os.path.join(get_package_share_directory('restaurant_nav'), 'config', 'mapper_params_online_async.yaml')),
                     ],
                 ),
 
@@ -142,15 +172,26 @@ def generate_launch_description():
                     }]
                 ),
 
-                Node(
-                    package='restaurant_nav',
-                    executable='pose_recorder',
-                ),
-                
                 IncludeLaunchDescription(
                     PythonLaunchDescriptionSource(
                         os.path.join(get_package_share_directory('mpu6050'), 'launch', 'mpu6050.launch.py'))
-                ),                
+                ),
+
+                Node(
+                    package='restaurant_nav',
+                    executable='goal_sender',
+                ),
+
+                # Node(
+                #     package='nav2_test',
+                #     executable='initial_pose_publisher',
+                #     output='screen',
+                # ),
+
+                Node(
+                    package='restaurant_nav',
+                    executable='publisher_table_num',
+                ),
             ],
             condition=UnlessCondition(is_sim)
         ),
@@ -208,11 +249,11 @@ def generate_launch_description():
                     executable='goal_sender',
                 ),
 
-                Node(
-                    package='nav2_test',
-                    executable='initial_pose_publisher',
-                    output='screen',
-                ),
+                # Node(
+                #     package='nav2_test',
+                #     executable='initial_pose_publisher',
+                #     output='screen',
+                # ),
 
                 Node(
                     package='restaurant_nav',
