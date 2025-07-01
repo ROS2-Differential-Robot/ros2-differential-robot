@@ -20,7 +20,7 @@ import os
 
 def generate_launch_description():
 
-    is_sim = LaunchConfiguration("is_sim")
+    is_sim   = LaunchConfiguration("is_sim")
     declare_is_sim = DeclareLaunchArgument(
         'is_sim', default_value='true',
         description='Set to true if running in simulation'
@@ -34,6 +34,78 @@ def generate_launch_description():
     delayed_nav2 = TimerAction(
         period=7.0,
         actions=[nav2_launch]
+    )
+
+    neu_lidar_dir = get_package_share_directory("neu_lidar")
+    mpu6050_dir = get_package_share_directory("mpu6050")
+    robot_description_path = os.path.join(neu_lidar_dir, "model", "v3_approx_xacro.urdf")
+    controller_params_path = os.path.join(neu_lidar_dir, "config", "controllers.yaml")
+    robot_description = ParameterValue(Command(['xacro ', robot_description_path]), value_type=str)
+
+    robot_state_publisher_node = Node(
+        package='robot_state_publisher',
+        executable='robot_state_publisher',
+        parameters=[{
+            'robot_description': robot_description,
+            'use_sim_time': True,
+        }],
+        output='screen'
+    )
+
+    static_tf_base_link = Node(
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        arguments=['0', '0', '0', '0', '0', '0', 'base_link', 'base_footprint'],
+        output='screen'
+    )
+
+    static_tf_lidar = Node(
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        arguments=['0', '0', '0', '0', '0', '0', 'lidar', 'adam/base_link/gpu_lidar'],
+        output='screen'
+    )
+
+    static_tf_imu = Node(
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        arguments=['0', '0', '0', '0', '0', '0', 'lidar', 'adam/base_link/imu_sensor'],
+        output='screen'
+    )
+
+    controller_manager_node = Node(
+        package="controller_manager",
+        executable="ros2_control_node",
+        parameters=[
+            {'robot_description': robot_description},
+            controller_params_path,
+            {"use_sim_time": is_sim}
+        ],
+    )
+
+    controller_spawner_node = Node(
+        package='controller_manager',
+        executable='spawner',
+        arguments=['diff_cont', 'joint_broad']
+    )
+
+    delayed_controller_manager = TimerAction(
+        period=3.0,
+        actions=[controller_manager_node]
+    )
+
+    lidar_driver_node = Node(
+        package="rplidar_ros",
+        executable="rplidar_composition",
+        parameters=[{
+            "serial_port": "/dev/ttyUSB0",
+            "frame_id": "lidar",
+            "angle_compensate": True
+        }]
+    )
+
+    mpu6050_driver_node = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(os.path.join(mpu6050_dir, 'launch', 'mpu6050.launch.py')),
     )
 
     goal_sender = Node(
@@ -58,6 +130,11 @@ def generate_launch_description():
     )
 
     map_file_path = LaunchConfiguration("map_file_path")
+    declare_map_file_path = DeclareLaunchArgument(
+        'map_file_path',
+        description='Path to map file'
+    )
+
     slam_params = os.path.join(get_package_share_directory("restaurant_nav"), "config", "mapper_params_online_async.yaml")
     
     configured_params = RewrittenYaml(
@@ -77,7 +154,7 @@ def generate_launch_description():
         PythonLaunchDescriptionSource(os.path.join(get_package_share_directory('nav2_test'), 'launch', 'localization_launch.py')),
         launch_arguments=[
             ("use_sim_time", "false"),
-            ("map", get_package_share_directory("nav2_test") + "/maps/ourPlayground.yaml")
+            ("map", "/home/abdo/my_map.yaml")
         ]
     )
 
@@ -89,9 +166,18 @@ def generate_launch_description():
 
     return LaunchDescription([
         declare_is_sim,
+        declare_map_file_path,
         slam_toolbox,
+        robot_state_publisher_node,
         ekf_node,
         # amcl,
+        mpu6050_driver_node,
+        static_tf_base_link,
+        static_tf_lidar,
+        static_tf_imu,
+        lidar_driver_node,
+        delayed_controller_manager,
+        controller_spawner_node,
         delayed_nav2,
         goal_sender,
         publisher_table_num,
